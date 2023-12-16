@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ .Chart.Name }}"
+  labels:
+    app: "{{ .Chart.Name }}"
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "{{ .Chart.Name }}"
+      release: "{{ .Release.Name }}"
+  template:
+    metadata:
+      labels:
+        app: "{{ .Chart.Name }}"
+        release: "{{ .Release.Name }}"
+    spec:
+      containers:
+      - name: "{{ .Chart.Name }}"
+        image: "{{ .Values.image }}:{{ .Values.imageTag }}"
+        imagePullPolicy: Always
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+        env:
+        - name: WORLD_ZIP_URL
+          value: {{ .Values.env.worldZipUrl | quote }}
+        - name: OVERWRITE
+          value: {{ .Values.env.overwrite | quote }}
+        ports:
+        - name: game-port
+          containerPort: {{ .Values.env.gamePort | int }}
+          protocol: UDP
+        volumeMounts:
+        - name: data
+          mountPath: /home/steam/space-engineers/world
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: "{{ .Chart.Name }}-data"
