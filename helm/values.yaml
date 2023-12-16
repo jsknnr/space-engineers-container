@@ -1,4 +1,4 @@
-image: sknnr/ark-ascended-server
+image: sknnr/space-engineers-dedicated-server
 imageTag: latest
 # serviceType should be LoadBalancer or NodePort
 serviceType: LoadBalancer
@@ -13,3 +13,4 @@ volumes:
 env:
   worldZipUrl: ""
   overwrite: "false"
+  gamePort: 27016
