@@ -64,4 +64,4 @@ echo "INFO: Launching Space Engineers Dedicated Server"
 export WINEDEBUG=-all
 
 # Launch Space Engineers
-wine ${SE_PATH}/DedicatedServer64/SpaceEngineersDedicated.exe -noconsole -ignorelastsession -path Z:\\home\\steam\\space-engineers\\world
+wine ${SE_PATH}/DedicatedServer64/SpaceEngineersDedicated.exe -noconsole -ignorelastsession -path Z:\\home\\steam\\space-engineers\\world\\Saves
