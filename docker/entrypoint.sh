@@ -13,7 +13,7 @@ if [ -n "$WORLD_ZIP_URL" ]; then
             unzip -o /home/steam/world.zip -d "${SE_PATH}/world"
             rm -f /home/steam/world.zip
         else
-            echo echo "INFO: OVERWRITE not true, not overwritting"
+            echo "INFO: OVERWRITE not true, not overwritting"
         fi
     else
         echo "INFO: Downloading and extracting world to ${SE_PATH}/world"
@@ -52,7 +52,10 @@ sed -i "s=<IP>.*</IP>=<IP>$(hostname -I)</IP>=g" $CONFIG_PATH
 
 # Update LoadWorld path to match Wine prefix path to save
 sed -E -i "s=<LoadWorld />|<LoadWorld.*LoadWorld>=<LoadWorld>${LOAD_WORLD_PATH}</LoadWorld>=g" $CONFIG_PATH
-
+echo "DEBUG: LoadWorld = ${LOAD_WORLD_PATH}"
+echo "DEBUG: Saves directory Contents:"
+ls -al /home/steam/space-engineers/world/Saves
+echo ""
 echo "INFO: Updating Space Engineers Dedicated Server"
 
 # Install Space Engineers Dedicated Server
@@ -64,4 +67,4 @@ echo "INFO: Launching Space Engineers Dedicated Server"
 export WINEDEBUG=-all
 
 # Launch Space Engineers
-wine ${SE_PATH}/DedicatedServer64/SpaceEngineersDedicated.exe -noconsole -ignorelastsession -path Z:\\home\\steam\\space-engineers\\world\\Saves
+wine ${SE_PATH}/DedicatedServer64/SpaceEngineersDedicated.exe -noconsole -ignorelastsession -path Z:\\home\\steam\\space-engineers\\world
