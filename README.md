@@ -4,7 +4,19 @@ It is painful to run Space Engineers dedicated in a container but here we are. I
 ## Usage
 The container does not run as the root user, it runs as the user steam (uid/gid 1000:1000). Mounted directories should have the correct ownership. Really you should use a volume though. 
 
-**Before** running the container you will need to generate new world files and config from the Windows version of the dedicated server utility. There is no way around this unless I include a stub in this repo which I am not going to do because that would be poor practice. There are guides out there for doing this already, so I won't do that here. The files should be mounted into the container at `/home/steam/space-engineers/world` with the `SpaceEngineers-Dedicated.cfg` and the `Saves` directory both present in `world`. The world directory is the only directory that is persistent, so just 1 volume is needed. 
+**Before** running the container you will need to generate new world files and config from the Windows version of the dedicated server utility. There is no way around this unless I include a stub in this repo which I am not going to do because that would be poor practice. There are guides out there for doing this already, so I won't do that here. The files should be mounted into the container at `/home/steam/space-engineers/world` with the `SpaceEngineers-Dedicated.cfg` and the `Saves` directory both present in `world` and not a sub-directory below `world`. The world directory is the only directory that is persistent, so just 1 volume is needed. The world directory should look like this for example:
+
+```yaml
+home:
+  steam:
+    space-engineers:
+      world:
+        - "SpaceEngineers-Dedicated.cfg"
+        - "..."
+        Saves:
+          - "Sandbox.sbc"
+          - "..."
+```
 
 I have also included some logic in the startup that if you provide the variable `WORLD_ZIP_URL` it will reach out to the url (Dropbox, Google Drive, S3, etc) and download a zip file (must be a zip) that contains your world config and Saves that you have generated. Providing the optional variable `OVERWRITE` and setting to string `true` will overwrite the contents of `world` if it detects an existing world. I built this functionality for myself as I use Kubernetes to orchestrate all of my containers and I don't want to mess around with manually putting files in container volumes.
 

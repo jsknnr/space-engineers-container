@@ -41,6 +41,12 @@ CONFIG_PATH="${SE_PATH}/world/SpaceEngineers-Dedicated.cfg"
 # Store directory name for the world save folder
 SAVE_NAME="$(grep -oEi '<LoadWorld>(.*)</LoadWorld>' ${CONFIG_PATH} | sed -E "s=<LoadWorld>|</LoadWorld>==g" | rev | cut -d '\' -f2 | rev)"
 
+# Check that LoadWorld path and Sandbox.sbc actually exists where I expect it to
+if ! [ -f "${SE_PATH}/world/Saves/${SAVE_NAME}/Sandbox.sbc" ]; then
+    echo "ERROR: Sandbox.sbc not present at: ${SE_PATH}/world/Saves/${SAVE_NAME}"
+    exit 1
+fi
+
 # Reconstructed LoadWorld save path to match wine prefix on container
 # Wine prefix uses double backslash so we need quad backslash to escape correctly
 LOAD_WORLD_PATH="Z:\\\\home\\\\steam\\\\space-engineers\\\\world\\\\Saves\\\\${SAVE_NAME}\\\\Sandbox.sbc"
