@@ -43,7 +43,10 @@ SAVE_NAME="$(grep -oEi '<LoadWorld>(.*)</LoadWorld>' ${CONFIG_PATH} | sed -E "s=
 
 # Reconstructed LoadWorld save path to match wine prefix on container
 # Wine prefix uses double backslash so we need quad backslash to escape correctly
-LOAD_WORLD_PATH="Z:\\\\home\\\\steam\\\\space-engineers\\\\world\\\\Saves\\\\${SAVE_NAME}"
+LOAD_WORLD_PATH="Z:\\\\home\\\\steam\\\\space-engineers\\\\world\\\\Saves\\\\${SAVE_NAME}\\\\Sandbox.sbc"
+echo ""
+echo "DEBUG: LoadWorld = ${LOAD_WORLD_PATH}"
+echo ""
 
 echo "INFO: Updating SpaceEngineers-Dedicated.cfg"
 
@@ -52,14 +55,14 @@ sed -i "s=<IP>.*</IP>=<IP>$(hostname -I)</IP>=g" $CONFIG_PATH
 
 # Update LoadWorld path to match Wine prefix path to save
 sed -E -i "s=<LoadWorld />|<LoadWorld.*LoadWorld>=<LoadWorld>${LOAD_WORLD_PATH}</LoadWorld>=g" $CONFIG_PATH
-echo "DEBUG: LoadWorld = ${LOAD_WORLD_PATH}"
-echo "DEBUG: Saves directory Contents:"
-ls -al /home/steam/space-engineers/world/Saves
-echo ""
+
 echo "INFO: Updating Space Engineers Dedicated Server"
 
 # Install Space Engineers Dedicated Server
 /home/steam/steamcmd/steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir "$SE_PATH" +login anonymous +app_update 298740 validate +quit
+
+# Clean up logs
+rm -rf /home/steam/space-engineers/world/Saves/*.log
 
 echo "INFO: Launching Space Engineers Dedicated Server"
 
